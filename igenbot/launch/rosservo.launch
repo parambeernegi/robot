@@ -1,4 +1,0 @@
-<launch>
-  <node pkg="tele" type="rosservo1.py" name="servo_feed" respawn="true" output="screen">
-  </node>
-</launch>

@@ -1,5 +1,0 @@
-<launch>
-  <node pkg="igenbot" type="Igenbot_v1.py" name="Igen_feed" respawn="true" output="screen">
-  </node>
-  <node pkg="igenbot" type="mqtt_node.py" name="igen_talk" />
-</launch>
