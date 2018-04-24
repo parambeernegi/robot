@@ -1,0 +1,3 @@
+<launch>
+   <node pkg="tele" type="mqtt_node.py" name="igenbot_talk" respawn="true" output="screen" />
+</launch>

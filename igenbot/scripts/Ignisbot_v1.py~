@@ -1,0 +1,46 @@
+#!/usr/bin/env python
+
+import rospy
+from std_msgs.msg import String
+from Ignisbot import Ignisbot
+import pigpio
+
+
+pi=pigpio.pi()
+
+ignis=Ignisbot.Ignisbot('v1')
+
+def set_cmd(msg):
+    #rate=rate.sleep(.33)
+    rospy.loginfo(rospy.get_caller_id() + " I heard direction: %s ",msg.data)
+    cmd=msg.data
+    count=0
+    if cmd == 'f' or cmd == 'l' or cmd == 'b' or cmd == 'r' and count==0:
+       ignis.move_ramp
+       count=count+1 
+    elif cmd =='f' or cmd== 'l' or cmd == 'b' or cmd == 'r' and count ==1:
+       ignis.move(cmd)
+       pre_cmd=cmd
+       cmd=msg.data
+       while cmd !=pre_cmd:
+          count=0
+          ignis.move_ramp_down()
+          ignis.stop()
+    elif cmd =='u' or cmd == 'd':
+       ignis.tilt(cmd)     
+    else :
+       ignis.stop()
+
+def ignis_feed():
+    rospy.init_node('Ignis_feed', anonymous=True)
+    rospy.Subscriber("/ignis/move", String, set_cmd)
+    rospy.spin()
+   
+if __name__=='__main__':
+    try:
+        ignis_feed()
+    except rospy.ROSInterruptException:
+        pass 
+   
+    finally:
+        pi.stop()
